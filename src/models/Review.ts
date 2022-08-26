@@ -1,3 +1,4 @@
+import { Product } from './productModel';
 import mongoose from'mongoose';
 
 interface ReviewType {
@@ -31,7 +32,7 @@ const ReviewSchema = new mongoose.Schema(
       required: true,
     },
     product: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Product',
       required: true,
     },
@@ -52,17 +53,17 @@ ReviewSchema.statics.calculateAverageRating = async function (productId) {
     },
   ]);
 
-//   try {
-//     await this.model('Product').findOneAndUpdate(
-//       { _id: productId },
-//       {
-//         averageRating: Math.ceil(result[0]?.averageRating || 0),
-//         numOfReviews: result[0]?.numOfReviews || 0,
-//       }
-//     );
-//   } catch (error) {
-//     console.log(error);
-//   }
+  try {
+    await this.model('Product').findOneAndUpdate(
+      { _id: productId },
+      {
+        averageRating: Math.ceil(result[0]?.averageRating || 0),
+        numOfReviews: result[0]?.numOfReviews || 0,
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 ReviewSchema.post('save', async function () {
