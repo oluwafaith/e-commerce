@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 
-const ProductSchema = new mongoose.Schema(
-  {
+const ProductSchema = new mongoose.Schema({
     name: {
       type: String,
       trim: true,
@@ -81,4 +80,4 @@ ProductSchema.pre('remove', async function (next) {
   await this.model('Review').deleteMany({ product: this._id });
 });
 
-export default mongoose.model('Product', ProductSchema);
+export const Product = mongoose.model('Product', ProductSchema);

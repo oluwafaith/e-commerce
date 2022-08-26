@@ -1,10 +1,10 @@
-import  Product  from "../models/productModel";
+import  {Product}  from "../models/productModel";
 import { Request, Response, NextFunction } from "express";
 import { catchAsync } from "../utils/catchAsync";
 import CustomError from "../errors";
 import path from "path";
 
-const createProduct = async (req: any, res: Response) => {
+const createProduct = async (req: any, res: Response) => { 
   req.body.user = req.user.userId;
   const product = await Product.create(req.body);
   res.status(201).json({ product });
@@ -17,6 +17,7 @@ const getAllProducts = async (req: any, res: Response) => {
 };
 
 const getSingleProduct = async (req: any, res: Response) => {
+  console.log("got here")
   const { id: productId } = req.params;
 
   const product = await Product.findOne({ _id: productId }).populate("reviews");
@@ -55,6 +56,7 @@ const deleteProduct = async (req: any, res: Response) => {
   await product.remove();
   res.status(200).json({ msg: "Success! Product removed." });
 };
+
 const uploadImage = async (req: any, res: Response) => {
   if (!req.files) {
     throw new CustomError.BadRequestError("No File Uploaded");
