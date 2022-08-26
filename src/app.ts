@@ -10,8 +10,8 @@ import indexRouter from "./routes/index";
 import usersRouter from "./routes/userRoutes";
 import authRouter from "./routes/authRoutes";
 import productRouter from "./routes/productRoutes";
-import transactionRouter from "./routes/transactionRoute";
-import purchaseRouter from "./routes/purchaseRoutes";
+import orderRouter from "./routes/orderRoutes";
+import reviewRouter from "./routes/reviewRoutes";
 const app = express();
 
 // view engine setup
@@ -28,8 +28,8 @@ app.use("/", indexRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/products", productRouter);
-app.use("/api/v1/purchase", purchaseRouter);
-app.use("/api/v1/transactions", transactionRouter);
+app.use("/api/v1/orders", orderRouter);
+app.use("/api/v1/reviews", reviewRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
