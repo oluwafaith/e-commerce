@@ -26,10 +26,6 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please provide password"],
     minlength: 6,
   },
-  wallet: {
-    type: Number,
-    default: 0,
-  },
   role: {
     type: String,
     enum: ["admin", "user"],
@@ -40,8 +36,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function () {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  //   if (this.isModified('password')){
-  //     this.password = await bcrypt.hash(this.password, 10);
+ 
 });
 
 userSchema.methods.comparePassword = async function (userPassword: any) {
