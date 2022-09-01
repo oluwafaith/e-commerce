@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { User } from "../models/userModel";
 import { Transaction } from "../models/transactionModel";
-import { Product } from "../models/productModel";
+// import { Product } from "../models/productModel";
 import CustomError from "../errors";
 import { catchAsync } from "../utils/catchAsync";
 import { Order } from "../models/purchaseModel";

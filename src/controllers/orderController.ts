@@ -1,33 +1,33 @@
-import { Request, Response } from 'express'
-import Order from '../models/orderModel'
-import {Product} from '../models/productModel'
+import { Request, Response } from "express";
+import Order from "../models/orderModel";
+import { Product } from "../models/productModel";
 
-import { StatusCodes } from 'http-status-codes'
-import CustomError from '../errors'
-import { checkPermissions } from '../utils'
+import { StatusCodes } from "http-status-codes";
+import CustomError from "../errors";
+import { checkPermissions } from "../utils";
 
-interface Currency{
-    amount: string,
-    currency: string
+interface Currency {
+  amount: string;
+  currency: string;
 }
-const fakeStripeAPI = async ({ amount, currency }:Currency) => {
-  const client_secret = 'someRandomValue';
+const fakeStripeAPI = async ({ amount, currency }: Currency) => {
+  const client_secret = "someRandomValue";
   return { client_secret, amount };
 };
 
-const createOrder = async (req:any, res:Response) => {
+const createOrder = async (req: any, res: Response) => {
   const { items: cartItems, tax, shippingFee } = req.body;
 
   if (!cartItems || cartItems.length < 1) {
-    throw new CustomError.BadRequestError('No cart items provided');
+    throw new CustomError.BadRequestError("No cart items provided");
   }
   if (!tax || !shippingFee) {
     throw new CustomError.BadRequestError(
-      'Please provide tax and shipping fee'
+      "Please provide tax and shipping fee"
     );
   }
 
-  let orderItems:any = [];
+  let orderItems: any = [];
   let subtotal = 0;
 
   for (const item of cartItems) {
@@ -55,7 +55,7 @@ const createOrder = async (req:any, res:Response) => {
   // get client secret
   const paymentIntent = await fakeStripeAPI({
     amount: total,
-    currency: 'usd',
+    currency: "usd",
   });
 
   const order = await Order.create({
@@ -73,12 +73,12 @@ const createOrder = async (req:any, res:Response) => {
     .json({ order, clientSecret: order.clientSecret });
 };
 
-const getAllOrders = async (req:any, res:Response) => {
+const getAllOrders = async (req: any, res: Response) => {
   const orders = await Order.find({});
   res.status(StatusCodes.OK).json({ orders, count: orders.length });
 };
 
-const getSingleOrder = async (req:any, res:Response) => {
+const getSingleOrder = async (req: any, res: Response) => {
   const { id: orderId } = req.params;
   const order = await Order.findOne({ _id: orderId });
   if (!order) {
@@ -88,12 +88,12 @@ const getSingleOrder = async (req:any, res:Response) => {
   res.status(StatusCodes.OK).json({ order });
 };
 
-const getCurrentUserOrders = async (req:any, res:Response) => {
+const getCurrentUserOrders = async (req: any, res: Response) => {
   const orders = await Order.find({ user: req.user.userId });
   res.status(StatusCodes.OK).json({ orders, count: orders.length });
 };
 
-const updateOrder = async (req:any, res:Response) => {
+const updateOrder = async (req: any, res: Response) => {
   const { id: orderId } = req.params;
   const { paymentIntentId } = req.body;
 
@@ -104,7 +104,7 @@ const updateOrder = async (req:any, res:Response) => {
   checkPermissions(req.user, order.user);
 
   order.paymentIntentId = paymentIntentId;
-  order.status = 'paid';
+  order.status = "paid";
   await order.save();
 
   res.status(StatusCodes.OK).json({ order });
