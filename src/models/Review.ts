@@ -64,7 +64,7 @@ ReviewSchema.statics.calculateAverageRating = async function (productId) {
   //   );
   // } catch (error) {
   //   console.log(error);
-  // }
+  // // }
 };
 
 ReviewSchema.post('save', async function () {
